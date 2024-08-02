@@ -5,6 +5,12 @@ class Home():
     def __init__(self):
         pass
 
+    # youtube link input 
+    # bestaetigung der abfrage 
+    # herunterladen der untertitel 
+    # video soll auf seite laufen
+    # keine suchfunktion 
+
     def section_1(self):
         pass
 
