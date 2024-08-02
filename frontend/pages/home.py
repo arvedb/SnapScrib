@@ -5,4 +5,17 @@ class Home():
     def __init__(self):
         pass
 
-    
+    def section_1(self):
+        pass
+
+    def load_button(self):
+        pass
+
+    def video_preview(self):
+        pass
+
+    def result_text_box(self):
+        pass
+
+    def surface(self):
+        self.section_1()
