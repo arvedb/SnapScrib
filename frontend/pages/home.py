@@ -5,7 +5,7 @@ import time
 
 class Home():
     def __init__(self):
-        self.link = 'https://www.youtube.com/watch?v=jrElyXgqrss'
+        # self.link = 'https://www.youtube.com/watch?v=jrElyXgqrss'
         
         self.valid_link = True
 
@@ -17,8 +17,18 @@ class Home():
     def load_button(self):
         pass
 
-    def video_preview(self):
-        pass
+    def video_preview(self, url:str, subtitles=False, muted=False):
+        """
+        subtitles - .vtt file 
+        
+        0:00:01.000 --> 0:00:02.000
+        Look!
+
+        0:00:03.000 --> 0:00:05.000
+        Look at the pretty stars!
+        """
+        
+        video = st.video(url, format='video/mp4', start_time=0, subtitles=subtitles, loop=False, autoplay=False, muted=muted)
 
     def result_text_box(self):
         pass
@@ -41,7 +51,9 @@ class Home():
             st.write('Checking link...')
             st.write('Found URL')
 
-            while not self.download() and not self.thumbnail():
+            self.video_preview(self.link)
+
+            while not self.download(): # and not self.thumbnail():
                 time.sleep(1)
 
             st.success('Download completed!')
@@ -51,10 +63,10 @@ class Home():
 
     def thumbnail(self):
         path = 'tests/thumbnail.jpg'
-        if self.link:
+        if not self.link:
             download_thumbnail(self.link, path)
         else:
-            st.error('Please enter a valid YouTube link.')
+            st.error('thumbnail error')
 
     def surface(self):
         self.link_input()
