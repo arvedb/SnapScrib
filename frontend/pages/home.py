@@ -5,9 +5,14 @@ import time
 
 class Home():
     def __init__(self):
-        #    self.link = 'https://www.youtube.com/watch?v=jrElyXgqrss'
+        # self.link = 'https://www.youtube.com/watch?v=jrElyXgqrss'
         
         self.valid_link = True
+
+    # bestaetigung der abfrage 
+    # herunterladen der untertitel 
+    # video soll auf seite laufen
+
 
     def load_button(self):
         pass
@@ -38,18 +43,20 @@ class Home():
             st.error('Please enter a valid YouTube link.')
             self.valid_link = False
 
-        status = st.status('Processing...')
-        #while not self.valid_link:
-        #time.sleep(1)
+        
+        with st.status('Processing...') as  status:
+            #while not self.valid_link:
+            #time.sleep(1)
 
-        status.update()
+            st.write('Checking link...')
+            st.write('Found URL')
 
-        self.video_preview(self.link)
+            self.video_preview(self.link)
 
-        while not self.download(): # and not self.thumbnail():
-            time.sleep(1)
+            while not self.download(): # and not self.thumbnail():
+                time.sleep(1)
 
-        st.success('Download completed!')
+            st.success('Download completed!')
         
     def download(self):
         download_youtube_video_as_audio(self.link)
