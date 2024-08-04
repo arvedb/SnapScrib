@@ -15,6 +15,11 @@
 *.aac
 *.m4a
 
+# images
+*.jpg
+*.jpeg
+*.png
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
