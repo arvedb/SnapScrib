@@ -1,9 +1,13 @@
 import streamlit as st
 from SnapScrib.youtube_audio.extract_audio import download_youtube_video_as_audio
+from backend.modules.yt_thumbnail import download_thumbnail
+import time
 
 class Home():
     def __init__(self):
-        pass
+        self.link = 'https://www.youtube.com/watch?v=jrElyXgqrss'
+        
+        self.valid_link = True
 
     # bestaetigung der abfrage 
     # herunterladen der untertitel 
@@ -20,24 +24,37 @@ class Home():
         pass
 
     def link_input(self):
-        self.link = st.chat_input(placeholder='Enter the link here', max_chars=None, )
+        self.link = st.chat_input(placeholder='Enter the link here', max_chars=None)
 
         self.check_link()
 
     def check_link(self):
-        if not self.link:
+        if self.link:
             st.error('Please enter a valid YouTube link.')
+            self.valid_link = False
 
-        with st.status('Processing...'):
+        
+        with st.status('Processing...') as  status:
+            #while not self.valid_link:
+            #time.sleep(1)
+
             st.write('Checking link...')
-            
             st.write('Found URL')
 
-            st.write('')
+            while not self.download() and not self.thumbnail():
+                time.sleep(1)
 
-    def downloading(self):
+            st.success('Download completed!')
+        
+    def download(self):
         download_youtube_video_as_audio(self.link)
-        st.success('Download completed!')
+
+    def thumbnail(self):
+        path = 'tests/thumbnail.jpg'
+        if self.link:
+            download_thumbnail(self.link, path)
+        else:
+            st.error('Please enter a valid YouTube link.')
 
     def surface(self):
         self.link_input()
@@ -46,9 +63,8 @@ class Home():
 home = Home()
 home.surface()
 
-"""
-variables from yt_dlp:
-    title (str)
-    creators (list)
-    duration_string (str)
-"""
+
+#variables from yt_dlp:
+#    title (str)
+#    creators (list)
+#    duration_string (str)

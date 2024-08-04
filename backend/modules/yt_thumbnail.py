@@ -1,15 +1,16 @@
 import pytube 
 import urllib.request
 
-def download_thumbnail(url):
+def download_thumbnail(url, path):
     try:
         video = pytube.YouTube(url)
         thumbnail = video.thumbnail_url
-        path = 'tests/thumbnail.jpg'
         urllib.request.urlretrieve(thumbnail, path)
         print("Thumbnail downloaded successfully.")
     except Exception as e:
         print(f"An error occurred: {e}")
 
-path = 'https://www.youtube.com/watch?v=6d3LwuTIOeQ'
-download_thumbnail(path)
+if __name__ == "__main__":
+    url = 'https://www.youtube.com/watch?v=jrElyXgqrss'
+    path = 'tests/thumbnail.jpg'
+    download_thumbnail(url, path)
