@@ -1,28 +1,36 @@
 from datetime import timedelta
-import os
 import json
+import os
+import sys
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'utils')))
+from logger_config import LOGGER
 
-
+if sys.platform == 'darwin':
+    import mlx_whisper
 
 def transcribe(path, filename):
-    import mlx_whisper
     path_or_hf_repo = "mlx-community/whisper-large-v3-mlx"
     speech_file = path
-    print("transcribing....")
-    result = mlx_whisper.transcribe(speech_file ,word_timestamps=True)
+    LOGGER.info("Transcribing...")
+    
+    try:
+        result = mlx_whisper.transcribe(speech_file, word_timestamps=True)
+    except Exception as e:
+        LOGGER.error(f"Transcription failed: {str(e)}")
+        sys.exit(1)
+    
     text = result["text"]
-    print(text)
+    LOGGER.debug(text)
     segments = result['segments']
-
 
     json_output = []
 
     for segment in segments:
-        startTime = str(0)+str(timedelta(seconds=int(segment['start'])))+',000'
-        endTime = str(0)+str(timedelta(seconds=int(segment['end'])))+',000'
+        startTime = str(0) + str(timedelta(seconds=int(segment['start']))) + ',000'
+        endTime = str(0) + str(timedelta(seconds=int(segment['end']))) + ',000'
         text = segment['text']
-        segmentId = segment['id']+1
+        segmentId = segment['id'] + 1
         segment = f"{segmentId}\n{startTime} --> {endTime}\n{text[1:] if text[0] == ' ' else text}\n\n"
 
         srt_directory = os.path.join("transcription", "SrtFiles")
@@ -41,9 +49,8 @@ def transcribe(path, filename):
 
     return srtFilename
 
-
 def writefile(input):
-    print("Writing JSON file to OS...")
+    LOGGER.info("Writing JSON file to OS...")
 
     json_directory = os.path.join("transcription", "json_files")
     os.makedirs(json_directory, exist_ok=True)
@@ -52,5 +59,6 @@ def writefile(input):
         json.dump(input, file, indent=2)
 
 if __name__ == "__main__":
-    transcribe()
-    #print(save)
+    test_path = "audiofile.wav"
+    test_filename = "test_output"
+    transcribe(test_path, test_filename)
